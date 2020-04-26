@@ -1,0 +1,253 @@
+-technion ex 2-
+
+#include "stdio.h"
+#define MAX_SIZE 10 
+void ReadMatrix(int arr[MAX_SIZE][MAX_SIZE],int* p);
+int IsOrdrered(int arr[MAX_SIZE][MAX_SIZE],int size,int s);
+void step (int arr [MAX_SIZE][MAX_SIZE],int size, int s);
+int OrderMat ( int arr [MAX_SIZE][MAX_SIZE],int size,int s);
+int sum=0;
+int ppNew[36];
+int pp2 [36];
+int pp1 [36];
+int main(void)
+{
+     
+  char size=0;
+  printf("size:");
+
+  scanf("%d",&size);
+  
+   int* p = &size;
+
+   int mat[MAX_SIZE][MAX_SIZE];
+
+   ReadMatrix( mat,p);
+   
+  int s ;
+  printf ("layer:");
+  scanf("%d",&s);
+  
+  int num = IsOrdrered( mat, size ,s);
+  
+  if (num==1)
+  {
+  printf("true\n");
+  }else {
+    printf("false\n");
+
+  }
+  int num3= OrderMat (mat,size,s);
+  printf ( "%d",num3);
+  
+  return 0;
+}
+void ReadMatrix(int arr[MAX_SIZE][MAX_SIZE],int* p)
+{ 
+        for ( int i =0 ; i <MAX_SIZE; i++)
+        {
+              for ( int j =0 ; j <MAX_SIZE; j++)   
+              {
+                arr[i][j]=-1;
+              }
+        }
+        printf("\n\n");
+        
+         for ( int i =0 ; i <*(p); i++)
+         {
+              for ( int j =0 ; j <*(p); j++)   
+              {
+                   printf("numbers:");   
+                scanf("%d",&arr[i][j]);
+               
+              }
+              printf("\n");
+        }
+        for (int i =0 ; i<*(p);i++)
+        {
+              for (int j =0 ; j<*(p);j++)   
+              {
+                 printf(" %d ",arr[i][j]);
+                 }
+                 printf("\n");
+               }
+        
+}
+
+int IsOrdrered(int arr[MAX_SIZE][MAX_SIZE], int size, int s)
+{    
+   
+      static int round1 = 0;
+      if(round1==0)
+      {
+       switch (s)
+       {
+         round1++;
+         case(1):
+         {
+           if (size%2==0)
+           {
+            sum = ((size-s+1)*2)+2*(size-s-1);
+           }
+           
+             if (size%2!=0)
+            {
+               sum =((size-s+1)*2)+2*(size-s-1);
+             }
+                int count =0;
+     
+               for ( int j= 0; j<size-(-s+1)*2 ; j++)
+              {
+               pp2[count] =  arr[s-1][j];
+               count++;
+             
+               }
+               
+               for ( int i= s; i<=(size-(s*2)); i++)
+               {
+                pp2[count]=arr[i][s-1];
+           
+                 count++; 
+                 
+                pp2[count]=arr[i][size-s]; 
+           
+                count++; 
+            
+                }
+              for ( int i= 0; i<size-(-s+1)*2; i++)
+              {
+                pp2[count]=arr[size-s][i];
+               count++;
+          
+              }
+              printf ( "\n\n");
+              break;
+           }
+        case (2):
+      {
+      
+       if ( size ==4)
+      {
+       sum =4; 
+       pp2[0]=arr[1][1];
+       pp2[1]=arr[1][2];
+       pp2[2]=arr [2][1];
+       pp2[3]=arr [2][2];
+      }
+      if(size ==3)
+      {
+     sum=1;
+     pp2[0]=arr[1][1];
+      }
+      break;
+     }
+     case(3):
+     {
+      if ( size ==6)
+      pp2[0]=arr[2][2];
+      break;
+      }
+   }
+  }
+  printf("round1%d",round1);
+            if (round1==1)
+          {
+            round1++;
+ 
+            int count2=1;   
+            
+               
+            for (int i = 0 ; i < sum ; i++)   
+            { 
+              printf("%d",pp2[i]);
+              if ( pp2 [i]< pp2[i+1])
+                    {
+                            count2++; 
+                    }
+            }
+        
+             if ( count2 == sum)
+             {
+                     
+                     return 1 ;
+             }else{ return 0 ;
+             }
+
+       }else{
+          int count2=1;   
+            for (int i = 0 ; i < sum ; i++)   
+            { 
+                    if ( ppNew [i]< ppNew[i+1])
+                    {
+                            count2++; 
+                    }
+            }
+              for (int i = 0 ; i < sum ; i++)   
+            { 
+                pp1[i]=ppNew[i];
+            }
+             if ( count2 == sum)
+             {
+                     
+                     return 1 ;
+             }else{ return 0 ;
+             }
+
+}
+}
+void step (int mat [MAX_SIZE][MAX_SIZE],int size, int s)
+{   
+  static int round2 =0;
+
+         if (round2==0)
+        { 
+          int temp2 = pp2[sum-1];
+          
+          for (int i=1 ; i<sum ; i++)
+         {
+               ppNew[i] =pp1[i]= pp2[i-1];
+                
+        }
+          ppNew[0]= pp1[0] =temp2;
+           round2++;
+        }
+          int temp3 =pp1[sum-1];
+          
+          for (int i=0 ; i <sum;i++)
+          {
+             ppNew[i]=pp1[i-1];
+          }
+             ppNew[0]=temp3;
+             
+             for (int i=0 ; i <sum;i++)
+         { printf ( "%d ",ppNew[i]);
+          }
+         printf ("\n\n");
+} 
+int OrderMat (int arr [MAX_SIZE][MAX_SIZE],int size,int s)
+{ 
+  int index=0;
+  int num= IsOrdrered(arr, size, s);
+  
+  if ( num==1)
+  {
+    printf ( "\n the mat is IsOrdrered\n");
+    return 2;
+  }
+  for ( int i = 0 ; i < sum ; i++)
+  {
+    step (arr, size, s);
+    int num2 =IsOrdrered(arr, size, s);
+    
+    if (num2 ==1)
+    {
+      index=i;
+      printf ("index: %d",index);
+      printf ( "\n IsOrdrered\n");
+      return 1;
+      
+    }
+  }
+   printf ( "\n the mat isNOT IsOrdrered\n");
+    return 0;
+  }
